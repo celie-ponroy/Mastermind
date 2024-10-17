@@ -48,28 +48,29 @@ public class Partie {
     public Reponse tourDeJeu(String motPropose) {
         nbEssais++;
         verifieNbEssais();
-        if(partieTerminee) {
-            return  null;
-        }
         Reponse reponse = new Reponse(motADeviner);
+        if(partieTerminee) {
+            return  null; // a changer
+        }
+
         reponse.compare(motPropose);
         if (reponse.lettresToutesPlacees())
-            done();
+            partieTerminee = true;
         return reponse;
     }
 
     // vérifie que le nombre d'essais max n'est pas atteint
-    private void verifieNbEssais() {
+    private synchronized boolean verifieNbEssais() {
         partieTerminee = (nbEssais>=NB_ESSAIS_MAX);
-    }
-
-    // la partie est-elle terminée
-    public boolean isTerminee() {
         return partieTerminee;
     }
-
+    // la partie est-elle terminée
+    public boolean isTerminee() {
+        return verifieNbEssais();
+    }
+/*
     // la partie est terminée
     void done() {
         partieTerminee = true;
-    }
+    }//changer en nom memonique */
 }
